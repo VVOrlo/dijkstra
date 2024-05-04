@@ -1,6 +1,7 @@
 import networkx as nx
 from math import inf
 
+
 def dijkstra(graph, start_node):
     # Создаем словарь для хранения расстояний
     distances = {}
@@ -36,7 +37,6 @@ def dijkstra(graph, start_node):
         for neighbor in graph.neighbors(current_node):
             # Вычисляем новое расстояние от начальной вершины до соседа
             distance = distances[current_node] + graph[current_node][neighbor]['weight']
-
             # Если новое расстояние меньше текущего, обновляем расстояние и предшественника
             if distance < distances[neighbor]:
                 distances[neighbor] = distance
@@ -44,18 +44,22 @@ def dijkstra(graph, start_node):
 
     return distances, predecessors
 
+
 # Пример использования
 if __name__ == "__main__":
     # Создаем граф
     G = nx.Graph()
     G.add_edge('A', 'B', weight=1)
-    G.add_edge('A', 'C', weight=4)
-    G.add_edge('B', 'C', weight=2)
-    G.add_edge('B', 'D', weight=5)
+    G.add_edge('B', 'C', weight=1)
     G.add_edge('C', 'D', weight=1)
+    G.add_edge('D', 'E', weight=5)
+    G.add_edge('D', 'G', weight=3)
+    G.add_edge('C', 'F', weight=3)
 
     # Запускаем алгоритм Дейкстры
     distances, predecessors = dijkstra(G, 'A')
 
-    # Выводим кратчайшие расстояния
-    print("Кратчайшие расстояния от вершины 'A':", distances)
+    # Выводим кратчайшие расстояния на русском
+    print("Кратчайшие расстояния от вершины 'A':")
+    for node, distance in distances.items():
+        print(f"До вершины {node} : Расстояние = {distance}")
