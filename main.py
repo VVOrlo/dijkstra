@@ -49,10 +49,10 @@ if __name__ == "__main__":
     # Создаем граф
     G = nx.Graph()
     G.add_edge('A', 'B', weight=1)
-    G.add_edge('B', 'C', weight=1)
+    G.add_edge('A', 'C', weight=4)
+    G.add_edge('B', 'C', weight=2)
+    G.add_edge('B', 'D', weight=5)
     G.add_edge('C', 'D', weight=1)
-    G.add_edge('C', 'E', weight=1)
-
 
     # Запускаем алгоритм Дейкстры
     distances, predecessors = dijkstra(G, 'A')
