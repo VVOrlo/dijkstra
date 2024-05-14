@@ -1,7 +1,6 @@
 import networkx as nx
 from math import inf
 
-
 def dijkstra(graph, start_node):
     # Создаем словарь для хранения расстояний
     dist = {}
@@ -44,6 +43,16 @@ def dijkstra(graph, start_node):
 
     return dist, preds
 
+def get_path(preds, start_node, end_node):
+    path = []
+    current_node = end_node
+    while current_node is not None:
+        path.insert(0, current_node)
+        current_node = preds[current_node]
+    if path[0] == start_node:
+        return path
+    else:
+        return None
 
 # Пример использования
 if __name__ == "__main__":
@@ -62,3 +71,13 @@ if __name__ == "__main__":
     print("Кратчайшие расстояния от вершины 'A':")
     for node, distance in distances.items():
         print(f"До вершины {node} : Расстояние = {distance}")
+
+    # Выводим кратчайшие пути на русском
+    print("\nКратчайшие пути от вершины 'A':")
+    for node in G.nodes():
+        if node != 'A':
+            path = get_path(predecessors, 'A', node)
+            if path:
+                print(f"Путь до вершины {node}: {' -> '.join(path)}")
+            else:
+                print(f"Путь до вершины {node} не найден.")
