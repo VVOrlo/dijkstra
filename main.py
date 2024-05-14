@@ -3,15 +3,11 @@ from math import inf
 
 def dijkstra(graph, start_node):
     # Создаем словарь для хранения расстояний
-    dist = {}
-    for n in graph.nodes():
-        dist[n] = inf
+    dist = {n: inf for n in graph.nodes()}
     dist[start_node] = 0
 
     # Создаем словарь для хранения предшественников
-    preds = {}
-    for n in graph.nodes():
-        preds[n] = None
+    preds = {n: None for n in graph.nodes()}
 
     # Создаем список непосещенных вершин
     unvisited = list(graph.nodes())
@@ -28,7 +24,7 @@ def dijkstra(graph, start_node):
         # Удаляем текущую вершину из непосещенных
         unvisited.remove(curr_node)
 
-        # Если расстояние до текущей вершины равно бесконечности, значит, достигли несвязанных вершин
+        # Если расстояние до текущей вершины равно бесконечности, значит достигли несвязанных вершин
         if dist[curr_node] == inf:
             break
 
@@ -64,19 +60,21 @@ if __name__ == "__main__":
     G.add_edge('B', 'D', weight=5)
     G.add_edge('C', 'D', weight=1)
 
+    start_node = 'B'  # Можно изменить на любую стартовую вершину
+
     # Запускаем алгоритм Дейкстры
-    distances, predecessors = dijkstra(G, 'A')
+    distances, predecessors = dijkstra(G, start_node)
 
     # Выводим кратчайшие расстояния
-    print("Кратчайшие расстояния от вершины 'A':")
+    print(f"Кратчайшие расстояния от вершины '{start_node}':")
     for node, distance in distances.items():
         print(f"До вершины {node} : Расстояние = {distance}")
 
     # Выводим кратчайшие пути
-    print("\nКратчайшие пути от вершины 'A':")
+    print(f"\nКратчайшие пути от вершины '{start_node}':")
     for node in G.nodes():
-        if node != 'A':
-            path = get_path(predecessors, 'A', node)
+        if node != start_node:
+            path = get_path(predecessors, start_node, node)
             if path:
                 print(f"Путь до вершины {node}: {' -> '.join(path)}")
             else:
