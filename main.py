@@ -1,17 +1,19 @@
 import networkx as nx
 from math import inf
 
-def dijkstra(graph, start_node):
-    # Создаем словарь для хранения расстояний
+def dijkstra(graph, start_node, end_node=None):
+    # Создаем словарь для хранения расстояний, изначально все расстояния бесконечны
     dist = {n: inf for n in graph.nodes()}
+    # Расстояние от начальной вершины до нее самой равно 0
     dist[start_node] = 0
 
-    # Создаем словарь для хранения предшественников
+    # Создаем словарь для хранения предшественников, изначально все предшественники None
     preds = {n: None for n in graph.nodes()}
 
     # Создаем список непосещенных вершин
     unvisited = list(graph.nodes())
 
+    # Пока есть непосещенные вершины
     while unvisited:
         # Находим вершину с наименьшим расстоянием
         min_dist = inf
@@ -37,18 +39,17 @@ def dijkstra(graph, start_node):
                 dist[neighbor] = d
                 preds[neighbor] = curr_node
 
-    return dist, preds
+    # Если конечная вершина указана, возвращаем кратчайший путь до нее
+    if end_node:
+        path = []
+        current_node = end_node
+        while current_node is not None:
+            path.insert(0, current_node)
+            current_node = preds[current_node]
+        return dist, path
 
-def get_path(preds, start_node, end_node):
-    path = []
-    current_node = end_node
-    while current_node is not None:
-        path.insert(0, current_node)
-        current_node = preds[current_node]
-    if path[0] == start_node:
-        return path
-    else:
-        return None
+    # В противном случае возвращаем кратчайшие расстояния до всех остальных вершин
+    return dist, preds
 
 # Пример использования
 if __name__ == "__main__":
@@ -60,22 +61,15 @@ if __name__ == "__main__":
     G.add_edge('B', 'D', weight=5)
     G.add_edge('C', 'D', weight=1)
 
-    start_node = 'B'  # Можно изменить на любую стартовую вершину
+    # Начальная и конечная вершины
+    start_node = 'A'
+    end_node = 'D'
 
     # Запускаем алгоритм Дейкстры
-    distances, predecessors = dijkstra(G, start_node)
+    distances, path = dijkstra(G, start_node, end_node)
 
-    # Выводим кратчайшие расстояния
-    print(f"Кратчайшие расстояния от вершины '{start_node}':")
+    # Выводим кратчайшие расстояния и путь до указанной конечной вершины
+    print(f"Кратчайшие расстояния от вершины '{start_node}' до всех остальных вершин:")
     for node, distance in distances.items():
         print(f"До вершины {node} : Расстояние = {distance}")
-
-    # Выводим кратчайшие пути
-    print(f"\nКратчайшие пути от вершины '{start_node}':")
-    for node in G.nodes():
-        if node != start_node:
-            path = get_path(predecessors, start_node, node)
-            if path:
-                print(f"Путь до вершины {node}: {' -> '.join(path)}")
-            else:
-                print(f"Путь до вершины {node} не найден.")
+    print(f"Кратчайший путь от вершины '{start_node}' до вершины '{end_node}': {' -> '.join(path)}")
